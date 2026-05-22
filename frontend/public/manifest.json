@@ -1,0 +1,27 @@
+{
+  "short_name": "Charcutería",
+  "name": "Charcutería Inventario Pro",
+  "description": "Gestión de inventario para charcutería",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#3D1F0E",
+  "background_color": "#FAF6F0",
+  "categories": ["business", "productivity"],
+  "lang": "es",
+  "scope": "/"
+}

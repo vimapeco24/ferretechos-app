@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Build output
+build/
+frontend/build/
+
+# Environment variables (contienen secretos)
+.env
+frontend/.env
+backend/.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+.claude/
+
+# Capacitor (se regenera con cap sync)
+android/
+ios/
+
+# Old files (migrated to backend/ and frontend/)
+/src/
+/public/
+/server/
+/package-lock.json
+frontend/package-lock.json

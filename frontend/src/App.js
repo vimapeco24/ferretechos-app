@@ -62,7 +62,10 @@ export default function App() {
         >
           <span /><span /><span />
         </button>
-        <span className="mobile-topbar-title">{PAGE_TITLES[page]}</span>
+        <div className="mobile-topbar-brand">
+          <span className="mobile-topbar-name">DISTRILACTEOS</span>
+          <span className="mobile-topbar-page">{PAGE_TITLES[page]}</span>
+        </div>
         <span style={{ width: 40 }} />
       </div>
 

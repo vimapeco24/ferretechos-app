@@ -69,7 +69,10 @@ export default function OrdCompra() {
     const { data: orden, error } = await supabase.from('ordenes_compra').insert({ numero, proveedor_id: form.proveedor_id, fecha_entrega: form.fecha_entrega || null, notas: form.notas, total: totalOrden }).select().single()
     if (error) { addToast('Error: ' + error.message, 'error'); return }
     const ords = items.filter(i => i.producto_id).map(i => ({ orden_compra_id: orden.id, producto_id: i.producto_id, cantidad: Number(i.cantidad), precio_unitario: Number(i.precio_unitario) }))
-    await supabase.from('ordenes_compra_items').insert(ords)
+    // Insertar items uno por uno para evitar errores de batch
+    for (const item of ords) {
+      await supabase.from('ordenes_compra_items').insert(item)
+    }
     addToast('Orden de compra creada ✓', 'success')
     setModal(false); setForm(FORM); setItems([{ producto_id: '', cantidad: 1, precio_unitario: 0 }]); cargar()
   }

@@ -54,8 +54,12 @@ export default function Ventas() {
     const { data: venta, error } = await supabase.from('ventas').insert({ numero, subtotal, descuento: Number(descuento), total, metodo_pago: metodo, cliente: cliente || null }).select().single()
     if (error) { addToast('Error al crear venta: ' + error.message, 'error'); return }
     const items = carrito.map(i => ({ venta_id: venta.id, producto_id: i.id, cantidad: i.cantidad, precio_unitario: i.precio_venta }))
-    await supabase.from('ventas_items').insert(items)
-    await Promise.all(carrito.map(i => supabase.from('movimientos').insert({ producto_id: i.id, tipo: 'venta', cantidad: i.cantidad, precio_unitario: i.precio_venta, motivo: `Venta ${numero}` })))
+    for (const item of items) {
+      await supabase.from('ventas_items').insert(item)
+    }
+    for (const i of carrito) {
+      await supabase.from('movimientos').insert({ producto_id: i.id, tipo: 'venta', cantidad: i.cantidad, precio_unitario: i.precio_venta, motivo: `Venta ${numero}` })
+    }
     addToast(`Venta ${numero} registrada ✓`, 'success')
     setCarrito([]); setMetodo('efectivo'); setCliente(''); setDescuento(0); setModal(false); cargar()
   }

@@ -11,11 +11,12 @@ function getApiBase() {
     return stored ? `${stored}/api` : null // null = no configurado aún
   }
 
-  // Web: usar variable de entorno si existe, sino /api (proxy en desarrollo)
+  // Web: usar variable de entorno si existe, sino fallback a la URL del backend en Render
   if (process.env.REACT_APP_API_URL) {
     return `${process.env.REACT_APP_API_URL}/api`
   }
-  return '/api'
+  // Fallback: URL del backend en producción
+  return 'https://ferretechos-app.onrender.com/api'
 }
 
 class QueryBuilder {

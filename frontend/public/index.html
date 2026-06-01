@@ -34,22 +34,10 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Service Worker con auto-update -->
+  <!-- Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(function(reg) {
-        // Check for updates every 60 seconds
-        setInterval(function() { reg.update(); }, 60000);
-        reg.addEventListener('updatefound', function() {
-          var newWorker = reg.installing;
-          newWorker.addEventListener('statechange', function() {
-            if (newWorker.state === 'activated') {
-              // New version available, reload
-              window.location.reload();
-            }
-          });
-        });
-      }).catch(console.error);
+      navigator.serviceWorker.register('/sw.js').catch(function() {});
     }
   </script>
 </body>

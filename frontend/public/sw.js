@@ -1,6 +1,6 @@
 // Service Worker - Ferretechos
 // Strategy: Network First (siempre intenta cargar del servidor primero)
-const CACHE = 'ferretechos-v2';
+const CACHE = 'ferretechos-v3';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();

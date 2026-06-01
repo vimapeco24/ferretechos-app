@@ -119,7 +119,11 @@ async function handleGet(table, params) {
 async function handleInsert(table, data) {
   const row = { ...data }
   if (!row.id) row.id = randomUUID()
-  if (!row.created_at) row.created_at = new Date().toISOString()
+  // Solo agregar created_at a tablas que tienen ese campo
+  const tablasConCreatedAt = ['productos', 'categorias', 'proveedores', 'movimientos', 'movimientos_stock', 'ordenes_compra', 'ventas']
+  if (!row.created_at && tablasConCreatedAt.includes(table)) {
+    row.created_at = new Date().toISOString()
+  }
   if ((table === 'ventas_items' || table === 'ordenes_compra_items') && !row.subtotal) {
     row.subtotal = (row.cantidad || 0) * (row.precio_unitario || 0)
   }

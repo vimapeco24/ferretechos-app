@@ -3,13 +3,27 @@ import React from 'react'
 export default function Home({ setPage }) {
   return (
     <div className="home-page">
-      {/* Hero Banner */}
+      {/* Hero Banner - muestra la imagen completa sin overlay */}
       <div className="home-hero">
-        <img src="/media/banner.png" alt="Ferretechos - Tu ferretería de confianza" />
-        <div className="home-hero__overlay">
-          <h1 className="home-hero__title">Ferretechos</h1>
-          <p className="home-hero__subtitle">Sistema de Gestión de Inventario</p>
+        <img src="/media/banner.png" alt="Ferretechos - Importadores PVC Techos, Drywall, Superboard, Muros, Ferretería" />
+      </div>
+
+      {/* Info bar */}
+      <div className="home-info-bar">
+        <div className="home-info-bar__item">
+          <i className="bi bi-telephone-fill"></i>
+          <span>310 802 2348</span>
         </div>
+        <div className="home-info-bar__item">
+          <i className="bi bi-envelope-fill"></i>
+          <span>gaferretechos@gmail.com</span>
+        </div>
+      </div>
+
+      {/* Section title */}
+      <div className="home-section-title">
+        <h2>Acceso rápido</h2>
+        <p>Gestiona tu inventario desde aquí</p>
       </div>
 
       {/* Quick Access Cards */}
@@ -79,11 +93,34 @@ export default function Home({ setPage }) {
           </div>
           <i className="bi bi-chevron-right home-card__arrow"></i>
         </button>
+
+        <button className="home-card" onClick={() => setPage('videos')}>
+          <div className="home-card__icon" style={{ background: '#FEF2F2' }}>
+            <i className="bi bi-play-circle" style={{ color: '#B91C1C' }}></i>
+          </div>
+          <div className="home-card__text">
+            <h3>Videos</h3>
+            <p>Galería multimedia</p>
+          </div>
+          <i className="bi bi-chevron-right home-card__arrow"></i>
+        </button>
+
+        <button className="home-card" onClick={() => setPage('dashboard')}>
+          <div className="home-card__icon" style={{ background: '#F0FDF4' }}>
+            <i className="bi bi-grid-1x2" style={{ color: '#16A34A' }}></i>
+          </div>
+          <div className="home-card__text">
+            <h3>Dashboard</h3>
+            <p>Panel de control</p>
+          </div>
+          <i className="bi bi-chevron-right home-card__arrow"></i>
+        </button>
       </div>
 
-      {/* Footer info */}
+      {/* Footer */}
       <div className="home-footer">
-        <p><i className="bi bi-geo-alt"></i> Ferretechos — Tu ferretería de confianza</p>
+        <p><i className="bi bi-geo-alt"></i> Diag. 48 Sur No. 18-14, Esquina</p>
+        <p style={{ marginTop: 4 }}>Ferretechos — Importadores PVC Techos</p>
       </div>
     </div>
   )

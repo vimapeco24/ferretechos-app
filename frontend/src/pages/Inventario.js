@@ -15,6 +15,7 @@ import {
   reactivarProducto,
   listarCategorias,
   guardarAtributosProducto,
+  obtenerAtributosCategoria,
   registrarMovimientoStock,
 } from '../lib/api'
 
@@ -169,11 +170,20 @@ export default function Inventario() {
 
       // Save category-specific attributes if present
       if (atributos && Object.keys(atributos).length > 0) {
-        const atributosArray = Object.entries(atributos).map(([nombre, valor]) => ({
-          categoria_atributo_id: nombre,
-          valor: String(valor),
-        }))
-        await guardarAtributosProducto(productoEditar.id, atributosArray)
+        const { data: attrDefs } = await obtenerAtributosCategoria(datosProducto.categoria_id)
+        if (attrDefs && attrDefs.length > 0) {
+          const atributosArray = []
+          for (const [nombre, valor] of Object.entries(atributos)) {
+            if (!valor || String(valor).trim() === '') continue
+            const def = attrDefs.find(d => d.nombre.toLowerCase() === nombre.toLowerCase())
+            if (def) {
+              atributosArray.push({ categoria_atributo_id: def.id, valor: String(valor) })
+            }
+          }
+          if (atributosArray.length > 0) {
+            await guardarAtributosProducto(productoEditar.id, atributosArray)
+          }
+        }
       }
 
       addToast('Producto actualizado ✓', 'success')
@@ -187,11 +197,21 @@ export default function Inventario() {
 
       // Save category-specific attributes if present
       if (data && atributos && Object.keys(atributos).length > 0) {
-        const atributosArray = Object.entries(atributos).map(([nombre, valor]) => ({
-          categoria_atributo_id: nombre,
-          valor: String(valor),
-        }))
-        await guardarAtributosProducto(data.id, atributosArray)
+        // Get category attribute definitions to map names to UUIDs
+        const { data: attrDefs } = await obtenerAtributosCategoria(datosProducto.categoria_id)
+        if (attrDefs && attrDefs.length > 0) {
+          const atributosArray = []
+          for (const [nombre, valor] of Object.entries(atributos)) {
+            if (!valor || String(valor).trim() === '') continue
+            const def = attrDefs.find(d => d.nombre.toLowerCase() === nombre.toLowerCase())
+            if (def) {
+              atributosArray.push({ categoria_atributo_id: def.id, valor: String(valor) })
+            }
+          }
+          if (atributosArray.length > 0) {
+            await guardarAtributosProducto(data.id, atributosArray)
+          }
+        }
       }
 
       addToast('Producto creado ✓', 'success')

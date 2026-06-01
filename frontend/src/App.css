@@ -651,7 +651,9 @@ body {
   padding: 16px;
 }
 
-.modal {
+.modal-overlay .modal,
+.modal-overlay .ft-modal {
+  display: block !important;
   background: #fff;
   border-radius: 16px;
   width: 100%;
@@ -660,11 +662,15 @@ body {
   overflow-y: auto;
   box-shadow: 0 25px 50px rgba(0,0,0,0.15);
   padding: 0;
+  position: relative;
+  opacity: 1;
+  transform: none;
 }
 
 @media (max-width: 575px) {
   .modal-overlay { align-items: flex-end; padding: 0; }
-  .modal {
+  .modal-overlay .modal,
+  .modal-overlay .ft-modal {
     border-radius: 20px 20px 0 0;
     max-height: 92vh;
     max-width: 100%;

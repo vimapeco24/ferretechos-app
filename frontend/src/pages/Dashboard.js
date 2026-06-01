@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { supabase } from '../lib/supabase'
+import { listarProductos } from '../lib/api'
+import { esStockBajo } from '../lib/validation'
 import { useIsMobile } from '../hooks/useIsMobile'
 
 export default function Dashboard({ setPage, setAlerts }) {
@@ -15,8 +17,8 @@ export default function Dashboard({ setPage, setAlerts }) {
   async function cargarDatos() {
     setLoading(true)
     try {
-      const { data: productos } = await supabase.from('productos').select('*').eq('activo', true)
-      const bajos = (productos || []).filter(p => p.stock_actual <= p.stock_minimo)
+      const { data: productos } = await listarProductos(true)
+      const bajos = (productos || []).filter(p => esStockBajo(p))
       const valorInventario = (productos || []).reduce((sum, p) => sum + (p.stock_actual * p.precio_compra), 0)
 
       const hoy = new Date().toISOString().split('T')[0]

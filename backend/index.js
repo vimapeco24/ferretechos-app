@@ -70,6 +70,9 @@ function buildPostgrestFilters(params) {
 // FK hints para PostgREST embedding
 const FK_HINTS = {
   productos: { categorias: 'categoria_id', proveedores: 'proveedor_id' },
+  producto_atributos: { productos: 'producto_id', categoria_atributos: 'categoria_atributo_id' },
+  categoria_atributos: { categorias: 'categoria_id' },
+  movimientos_stock: { productos: 'producto_id' },
   movimientos: { productos: 'producto_id', proveedores: 'proveedor_id' },
   ordenes_compra: { proveedores: 'proveedor_id' },
   ordenes_compra_items: { productos: 'producto_id', ordenes_compra: 'orden_compra_id' },
@@ -228,7 +231,7 @@ const server = http.createServer(async (req, res) => {
 })
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`🥩 Charcutería API corriendo en http://0.0.0.0:${PORT}`)
+  console.log(`🔧 Ferretechos API corriendo en http://0.0.0.0:${PORT}`)
   console.log(`   Supabase: ${SUPABASE_URL}`)
   console.log(`   CORS: ${ALLOWED_ORIGINS.join(', ')}`)
 })

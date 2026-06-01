@@ -1,7 +1,7 @@
 services:
-  # ─── Backend (Web Service - Free) ────────────────────────────
+  # ─── Backend (Web Service) ───────────────────────────────────
   - type: web
-    name: charcuteria-backend
+    name: ferretechos-backend
     runtime: node
     plan: free
     rootDir: backend
@@ -15,9 +15,9 @@ services:
       - key: ALLOWED_ORIGINS
         sync: false
 
-  # ─── Frontend (Static Site - Free) ──────────────────────────
+  # ─── Frontend (Static Site) ─────────────────────────────────
   - type: web
-    name: charcuteria-app
+    name: ferretechos-app
     runtime: static
     plan: free
     rootDir: frontend

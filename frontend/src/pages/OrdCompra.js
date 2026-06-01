@@ -220,29 +220,40 @@ export default function OrdCompra() {
       {/* Detalle orden */}
       {detalle && (
         <div className="modal-overlay" onClick={() => setDetalle(null)}>
-          <div className="modal">
+          <div className="modal" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Orden {detalle.numero}</h2>
               <button className="btn-icon" onClick={() => setDetalle(null)}>✕</button>
             </div>
-            <p style={{ color: '#A08060', marginBottom: 16 }}>Proveedor: <strong>{detalle.proveedores?.nombre}</strong></p>
-            <div className="table-wrap">
-              <table>
-                <thead><tr><th>Producto</th><th>Cantidad</th><th>P. Unitario</th><th>Subtotal</th></tr></thead>
-                <tbody>
-                  {(detalle.ordenes_compra_items || []).map(item => (
-                    <tr key={item.id}>
-                      <td>{item.productos?.nombre}</td>
-                      <td>{item.cantidad} {item.productos?.unidad}</td>
-                      <td>{fmt(item.precio_unitario)}</td>
-                      <td>{fmt(item.subtotal || item.cantidad * item.precio_unitario)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div style={{ padding: '0 24px 16px' }}>
+              <p style={{ color: 'var(--muted)', marginBottom: 16 }}>Proveedor: <strong style={{ color: 'var(--text)' }}>{detalle.proveedores?.nombre || '—'}</strong></p>
+              <div className="table-wrap" style={{ margin: 0 }}>
+                <table>
+                  <thead><tr><th>Producto</th><th>Cantidad</th><th>P. Unitario</th><th>Subtotal</th></tr></thead>
+                  <tbody>
+                    {(detalle.ordenes_compra_items || []).map(item => {
+                      const prod = productos.find(p => p.id === item.producto_id)
+                      const nombre = item.productos?.nombre || prod?.nombre || 'Producto'
+                      const unidad = item.productos?.unidad || prod?.unidad || ''
+                      const sub = item.subtotal || (Number(item.cantidad) * Number(item.precio_unitario))
+                      return (
+                        <tr key={item.id}>
+                          <td style={{ fontWeight: 500 }}>{nombre}</td>
+                          <td>{item.cantidad} {unidad}</td>
+                          <td>{fmt(item.precio_unitario)}</td>
+                          <td style={{ fontWeight: 600 }}>{fmt(sub)}</td>
+                        </tr>
+                      )
+                    })}
+                    {(detalle.ordenes_compra_items || []).length === 0 && (
+                      <tr><td colSpan="4" style={{ textAlign: 'center', color: 'var(--muted)', padding: 20 }}>No hay items en esta orden</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              <div style={{ textAlign: 'right', marginTop: 12, fontWeight: 700, fontSize: 16, color: 'var(--text)' }}>Total: {fmt(detalle.total)}</div>
+              {detalle.notas && <p style={{ marginTop: 12, fontSize: 13, color: 'var(--muted)' }}>Notas: {detalle.notas}</p>}
             </div>
-            <div style={{ textAlign: 'right', marginTop: 12, fontWeight: 600, fontSize: 16 }}>Total: {fmt(detalle.total)}</div>
-            {detalle.notas && <p style={{ marginTop: 12, fontSize: 13, color: '#A08060' }}>Notas: {detalle.notas}</p>}
           </div>
         </div>
       )}

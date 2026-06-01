@@ -24,7 +24,10 @@ services:
     headers:
       - path: /sw.js
         name: Cache-Control
-        value: no-cache
+        value: no-cache, no-store, must-revalidate
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
       - path: /manifest.json
         name: Cache-Control
         value: no-cache

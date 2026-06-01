@@ -17,6 +17,17 @@ export default function OrdCompra() {
   const [loading, setLoading] = useState(true)
   const [modal, setModal] = useState(false)
   const [detalle, setDetalle] = useState(null)
+  const [detalleItems, setDetalleItems] = useState([])
+
+  async function abrirDetalle(orden) {
+    setDetalle(orden)
+    // Cargar items de la orden por separado
+    const { data } = await supabase
+      .from('ordenes_compra_items')
+      .select('*')
+      .eq('orden_compra_id', orden.id)
+    setDetalleItems(data || [])
+  }
   const { addToast, ToastContainer } = useToast()
   const isMobile = useIsMobile()
 
@@ -112,7 +123,7 @@ export default function OrdCompra() {
                     {(o.ordenes_compra_items || []).length > 0 && ': ' + (o.ordenes_compra_items || []).map(i => i.productos?.nombre).slice(0, 3).join(', ')}
                   </div>
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    <button className="btn btn-sm btn-secondary" onClick={() => setDetalle(o)}>Ver detalle</button>
+                    <button className="btn btn-sm btn-secondary" onClick={() => abrirDetalle(o)}>Ver detalle</button>
                     {o.estado === 'pendiente' && <button className="btn btn-sm btn-secondary" onClick={() => cambiarEstado(o.id, 'enviada')}>Enviar</button>}
                     {o.estado === 'enviada' && <button className="btn btn-sm btn-primary" onClick={() => cambiarEstado(o.id, 'recibida')}>✓ Recibir</button>}
                     {(o.estado === 'pendiente' || o.estado === 'enviada') && <button className="btn btn-sm btn-danger" onClick={() => cambiarEstado(o.id, 'cancelada')}>Cancelar</button>}
@@ -141,7 +152,7 @@ export default function OrdCompra() {
                       <td style={{ fontWeight: 600 }}>{fmt(o.total)}</td>
                       <td>
                         <div style={{ display: 'flex', gap: 6 }}>
-                          <button className="btn btn-sm btn-secondary" onClick={() => setDetalle(o)}>Ver</button>
+                          <button className="btn btn-sm btn-secondary" onClick={() => abrirDetalle(o)}>Ver</button>
                           {o.estado === 'pendiente' && <button className="btn btn-sm btn-secondary" onClick={() => cambiarEstado(o.id, 'enviada')}>Enviar</button>}
                           {o.estado === 'enviada' && <button className="btn btn-sm btn-primary" onClick={() => cambiarEstado(o.id, 'recibida')}>✓ Recibir</button>}
                           {(o.estado === 'pendiente' || o.estado === 'enviada') && <button className="btn btn-sm btn-danger" onClick={() => cambiarEstado(o.id, 'cancelada')}>✕</button>}
@@ -231,10 +242,10 @@ export default function OrdCompra() {
                 <table>
                   <thead><tr><th>Producto</th><th>Cantidad</th><th>P. Unitario</th><th>Subtotal</th></tr></thead>
                   <tbody>
-                    {(detalle.ordenes_compra_items || []).map(item => {
+                    {detalleItems.map(item => {
                       const prod = productos.find(p => p.id === item.producto_id)
-                      const nombre = item.productos?.nombre || prod?.nombre || 'Producto'
-                      const unidad = item.productos?.unidad || prod?.unidad || ''
+                      const nombre = prod?.nombre || 'Producto'
+                      const unidad = prod?.unidad || ''
                       const sub = item.subtotal || (Number(item.cantidad) * Number(item.precio_unitario))
                       return (
                         <tr key={item.id}>
@@ -245,8 +256,8 @@ export default function OrdCompra() {
                         </tr>
                       )
                     })}
-                    {(detalle.ordenes_compra_items || []).length === 0 && (
-                      <tr><td colSpan="4" style={{ textAlign: 'center', color: 'var(--muted)', padding: 20 }}>No hay items en esta orden</td></tr>
+                    {detalleItems.length === 0 && (
+                      <tr><td colSpan="4" style={{ textAlign: 'center', color: 'var(--muted)', padding: 20 }}>Cargando items...</td></tr>
                     )}
                   </tbody>
                 </table>

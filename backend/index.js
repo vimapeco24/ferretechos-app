@@ -234,8 +234,16 @@ const server = http.createServer(async (req, res) => {
   jsonResponse(res, 404, { error: 'Not found. Use /api/{table}' })
 })
 
+// ─── Self-ping to prevent Render free tier from sleeping ─────────────────────
+// Pings /health every 14 minutes to keep the service awake
+const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://0.0.0.0:${PORT}`
+setInterval(() => {
+  fetch(`${SELF_URL}/health`).catch(() => {})
+}, 14 * 60 * 1000) // every 14 minutes
+
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`🔧 Ferretechos API corriendo en http://0.0.0.0:${PORT}`)
   console.log(`   Supabase: ${SUPABASE_URL}`)
   console.log(`   CORS: ${ALLOWED_ORIGINS.join(', ')}`)
+  console.log(`   Keep-alive: ping cada 14 min`)
 })
